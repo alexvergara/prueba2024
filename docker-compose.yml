@@ -16,3 +16,13 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d" # Persistent data
+  migrate:
+    image: php:cli
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    command: >
+        bash -c "apt-get update && apt-get install -y default-mysql-client && bash /var/www/html/database/migrate.sh"
