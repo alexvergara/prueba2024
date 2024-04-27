@@ -1,16 +1,17 @@
 version: '3'
 services:
   web:
-  #  image: php:apache
+#    image: php:apache
     container_name: php_apache_container
     build:
       context: .
-      dockerfile: .docker/Dockerfile
+      dockerfile: .docker/web/Dockerfile
     volumes:
       - .:/var/www/html
+      - /var/www/html/vendor/   # Keep the vendor files in the host
     links:
       - db
-  #    - redis
+    #  - redis
     ports:
       - "8080:80"
       - "443:443"
@@ -19,36 +20,19 @@ services:
       DB_DATABASE: prueba2024
       DB_USERNAME: user
       DB_PASSWORD: password
-  #    REDIS_HOST: redis
-  #    SESSION_DRIVER: redis
-  #    CACHE_DRIVER: redis
-  #    XDEBUG_CONFIG: remote_host=192.168.0.172
+    #  REDIS_HOST: redis
+    #  SESSION_DRIVER: redis
+    #  CACHE_DRIVER: redis
+    #  XDEBUG_CONFIG: remote_host=192.168.0.172
   db:
-    image: mysql:latest
-    environment:
-      MYSQL_DATABASE: prueba2024
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+    # image: mysql:latest
+    container_name: mysql_container
+    build:
+      context: .
+      dockerfile: .docker/db/Dockerfile
     ports:
       - "3306:3306"
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d" # Persistent data
-  #redis:
-  #  image: redis:4.0-alpine
-  #  ports:
-  #    - 16379:6379
-  migrate:
-    image: php:cli
-    volumes:
-      - .:/var/www/html
-    links:
-      - db
-    depends_on:
-      - db
-    command: >
-        bash -c "apt-get update && apt-get install -y default-mysql-client curl unzip
-        && curl -sS https://getcomposer.org/download/2.7.2/composer.phar -o composer.phar
-        && mv composer.phar /usr/local/bin/composer && chmod 755 /usr/local/bin/composer
-        && cd /var/www/html
-        && bash ./database/migrate.sh; /usr/local/bin/composer install"
+#   redis:
+#    image: redis:4.0-alpine
+#    ports:
+#      - 16379:6379
