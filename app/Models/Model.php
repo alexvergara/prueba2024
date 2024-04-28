@@ -18,6 +18,11 @@ class Model
     protected $table = '';
 
     /**
+     * Fillable columns
+     */
+    protected $accessible = [];
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -84,6 +89,10 @@ class Model
      */
     public function insert(array $data): bool
     {
+        // Filter only the accessible columns
+        $data = array_intersect_key($data, array_flip($this->accessible));
+
+        // Prepare the query, e.g., INSERT INTO table (column1, column2) VALUES (:column1, :column2)
         $columns = implode(',', array_keys($data));
         $values = implode(',', array_map(function ($value) {
             return ":$value";
@@ -103,6 +112,9 @@ class Model
      */
     public function create(array $data, int $fetchMode = null): mixed
     {
+        // Filter only the accessible columns
+        $data = array_merge($data, ['created_at' => date('Y-m-d H:i:s')]);
+
         $this->insert($data);
 
         return $this->find($this->pdo->lastInsertId(), ['*'], $fetchMode ?: PDO::FETCH_DEFAULT);
