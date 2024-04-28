@@ -26,7 +26,7 @@ class Controller
     public function index()
     {
         $data = $this->model->all();
-        echo json_encode($data);
+        Response::json($data);
     }
 
     /**
@@ -36,7 +36,7 @@ class Controller
     public function show($id)
     {
         $data = $this->model->find($id);
-        echo json_encode($data);
+        Response::json($data);
     }
 
     /**
@@ -46,7 +46,7 @@ class Controller
     {
         $data = Request::input();
         $this->model->create($data);
-        echo json_encode(['message' => 'Data has been created']);
+        Response::json(['message' => 'Data has been created'], Response::HTTP_CREATED);
     }
 
     /**
@@ -57,7 +57,7 @@ class Controller
     {
         $data = Request::input();
         $this->model->find($id)->update($data);
-        echo json_encode(['message' => 'Data has been updated']);
+        Response::json(['message' => 'Data has been updated'], Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -67,7 +67,7 @@ class Controller
     public function destroy($id)
     {
         $this->model->destroy($id);
-        echo json_encode(['message' => 'Data has been deleted']);
+        Response::json(['message' => 'Data has been deleted'], Response::HTTP_ACCEPTED);
     }
 
     /**
