@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Core\Response;
-use App\Services\Authorization;
+use App\Services\NotificationService;
+use App\Services\AuthorizationService;
 
 class Transaction extends Model
 {
@@ -67,9 +68,10 @@ class Transaction extends Model
         //-------------------/
 
         // Transaction
+        $transaction = false;
         $this->pdo->beginTransaction();
         try {
-            $authorization = Authorization::authorize(); // Authorize the transaction
+            $authorization = AuthorizationService::authorize(); // Authorize the transaction
 
             if (!$authorization || $authorization['message'] !== 'Autorizado') {
                 $this->pdo->rollBack();
@@ -92,6 +94,31 @@ class Transaction extends Model
         } catch (\Exception $e) {
             $this->pdo->rollBack();
             return Response::internalServerError($e->getMessage());
+        }
+
+        if ($transaction) {
+            // Send notification
+            $body = "Hi {$payee['full_name']}, you have received {$data['amount']} from {$payer['full_name']}";
+
+            // TODO: Validate if the user wants to receive notifications by email or SMS
+            $type = 'email'; // TODO: Add phone number to the user table and notification type
+            try {
+                $notification = new Notification($this->pdo);
+                $new_notification = $notification->create([
+                    'transaction_id' => $transaction['id'],
+                    'type' => $type,
+                    'body' => $body,
+                ]);
+
+                $notified = NotificationService::notify($type, $payee['email'], $body, 'Transaction Received');
+
+                $status = ($notified && $notified['message']) ? 'completed' : 'failed';
+                $notification->save($new_notification['id'], ['status' => $status]);
+
+                //TODO: Create process to retry the notification when pending/failed
+            } catch (\Exception $e) {
+                // TODO: Log the error
+            }
         }
 
         return true;

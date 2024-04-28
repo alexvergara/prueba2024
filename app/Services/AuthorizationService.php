@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Libraries\HttpClient;
 
-class Authorization
+class AuthorizationService
 {
 
     /**

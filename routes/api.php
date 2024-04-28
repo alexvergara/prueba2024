@@ -13,11 +13,11 @@ Router::delete('/users/{id}', 'UserController', 'destroy', $prefix);
 
 
 # Transaction Routes
-Router::get('/transactions', 'TransactionController', 'index', $prefix);
-Router::get('/transactions/{id}', 'TransactionController', 'show', $prefix);
+// Router::get('/transactions', 'TransactionController', 'index', $prefix);
+// Router::get('/transactions/{id}', 'TransactionController', 'show', $prefix);
 Router::post('/transactions', 'TransactionController', 'store', $prefix);
-Router::put('/transactions/{id}', 'TransactionController', 'update', $prefix);
-Router::delete('/transactions/{id}', 'TransactionController', 'destroy', $prefix);
+// Router::put('/transactions/{id}', 'TransactionController', 'update', $prefix);
+// Router::delete('/transactions/{id}', 'TransactionController', 'destroy', $prefix);
 
 
 # 404 Route fallback
