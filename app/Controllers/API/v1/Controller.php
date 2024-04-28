@@ -3,6 +3,7 @@
 namespace App\Controllers\API\v1;
 
 use App\Core\Request;
+use App\Core\Response;
 
 class Controller
 {
@@ -49,7 +50,7 @@ class Controller
         $this->model->validate($data);
 
         $this->model->create($data);
-        Response::json(['message' => 'Data has been created'], Response::HTTP_CREATED);
+        Response::json(['message' => 'Data has been created'], Response::STATUS_CREATED);
     }
 
     /**
@@ -60,10 +61,14 @@ class Controller
     {
         $data = Request::input();
 
-        $this->model->validate($data);
+        $rules = $this->model->rules;
+        $rules['identification'] .= ',' . $id;
+        $rules['email'] .= ',' . $id;
 
-        $this->model->find($id)->update($data);
-        Response::json(['message' => 'Data has been updated'], Response::HTTP_ACCEPTED);
+        $this->model->validate($data, false, true, $rules);
+
+        $this->model->update($id, $data);
+        Response::json(['message' => 'Data has been updated'], Response::STATUS_OK);
     }
 
     /**
@@ -73,7 +78,7 @@ class Controller
     public function destroy($id)
     {
         $this->model->destroy($id);
-        Response::json(['message' => 'Data has been deleted'], Response::HTTP_ACCEPTED);
+        Response::json(['message' => 'Data has been deleted'], Response::STATUS_OK);
     }
 
     /**

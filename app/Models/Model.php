@@ -41,17 +41,27 @@ class Model
         $this->pdo = (new Database())->getConnection();
     }
 
+
+    /**
+     * Get the model name
+     * @return string
+     */
+    public function parse_data($data)
+    {
+        return $data;
+    }
+
     /**
      * Validate the data
      * @param array $data
      * @param bool $die
      * @return bool
      */
-    public function validate(array $data, bool $die = true): bool
+    public function validate(array $data, $strict = true, bool $die = true, array $rules = []): bool
     {
         $validator = new Validator();
 
-        return $validator->validate($data, $this->table, $this->rules, $this->pdo, $die);
+        return $validator->validate($data, $strict, $this->table, array_merge($this->rules, $rules), $this->pdo, $die);
     }
 
     /**
@@ -115,6 +125,7 @@ class Model
     {
         // Filter only the accessible columns
         $data = array_intersect_key($data, array_flip($this->accessible));
+        $data = $this->parse_data($data);
 
         // Prepare the query, e.g., INSERT INTO table (column1, column2) VALUES (:column1, :column2)
         $columns = implode(',', array_keys($data));
@@ -136,9 +147,6 @@ class Model
      */
     public function create(array $data, int $fetchMode = null): mixed
     {
-        // Filter only the accessible columns
-        $data = array_merge($data, ['created_at' => date('Y-m-d H:i:s')]);
-
         $this->insert($data);
 
         return $this->find($this->pdo->lastInsertId(), ['*'], $fetchMode ?: PDO::FETCH_DEFAULT);
@@ -152,21 +160,18 @@ class Model
      */
     public function update(int $id, array $data): bool
     {
+        // Filter only the accessible columns
+        $data = array_intersect_key($data, array_flip($this->accessible));
+        $data = $this->parse_data($data);
+
         $set = implode(',', array_map(function ($key) {
             return "$key = :$key";
         }, array_keys($data)));
 
         $query = "UPDATE $this->table SET $set WHERE id = :id";
-        var_dump($query);
         $stmt = $this->pdo->prepare($query);
 
-        $stmt->bindParam(':id', $id);
-
-        foreach ($data as $key => $value) {
-            $stmt->bindParam(":$key", $value);
-        }
-
-        return $stmt->execute();
+        return $stmt->execute(array_merge($data, ['id' => $id]));
     }
 
     /**
@@ -188,7 +193,7 @@ class Model
      * @param int $id
      * @return bool
      */
-    public function delete(int $id): bool
+    public function destroy(int $id): bool
     {
         $query = "DELETE FROM $this->table WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
