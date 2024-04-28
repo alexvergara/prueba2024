@@ -30,7 +30,7 @@ class Model
      * @param int $fetchMode
      * @return mixed
      */
-    public function all($fetchMode = null)
+    public function all(int $fetchMode = null): mixed
     {
         $query = "SELECT * FROM $this->table";
         $stmt = $this->pdo->prepare($query);
@@ -46,7 +46,7 @@ class Model
      * @param int $fetchMode
      * @return mixed
      */
-    public function find($id, $columns = ['*'], $fetchMode = null)
+    public function find(int $id, array $columns = ['*'], int $fetchMode = null): mixed
     {
         $query = "SELECT " . implode(',', $columns) . " FROM $this->table WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
@@ -63,7 +63,7 @@ class Model
      * @param int $fetchMode
      * @return mixed
      */
-    public function get($conditions = [], $columns = ['*'], $fetchMode = null)
+    public function get(array $conditions = [], array $columns = ['*'], int $fetchMode = null): mixed
     {
         $query = "SELECT " . implode(',', $columns) . " FROM $this->table";
         if (!empty($conditions)) {
@@ -82,7 +82,7 @@ class Model
      * @param array $data
      * @return bool
      */
-    public function insert($data)
+    public function insert(array $data): bool
     {
         $columns = implode(',', array_keys($data));
         $values = implode(',', array_map(function ($value) {
@@ -101,7 +101,7 @@ class Model
      * @param int $fetchMode
      * @return mixed
      */
-    public function create($data, $fetchMode = null)
+    public function create(array $data, int $fetchMode = null): mixed
     {
         $this->insert($data);
 
@@ -114,7 +114,7 @@ class Model
      * @param array $data
      * @return bool
      */
-    public function update($id, $data)
+    public function update(int $id, array $data): bool
     {
         $set = implode(',', array_map(function ($key) {
             return "$key = :$key";
@@ -140,7 +140,7 @@ class Model
      * @param int $fetchMode
      * @return mixed
      */
-    public function save($id, $data, $fetchMode = null)
+    public function save(int $id, array $data, int $fetchMode = null): mixed
     {
         $this->update($id, $data);
 
@@ -152,7 +152,7 @@ class Model
      * @param int $id
      * @return bool
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $query = "DELETE FROM $this->table WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
