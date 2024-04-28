@@ -12,7 +12,7 @@ class Model
      * Database connection
      * @var PDO
      */
-    private $pdo;
+    protected $pdo;
 
     /**
      * Table name
@@ -36,9 +36,9 @@ class Model
      * Constructor
      * - Initialize the database connection
      */
-    public function __construct()
+    public function __construct(PDO $pdo = null)
     {
-        $this->pdo = (new Database())->getConnection();
+        $this->pdo = $pdo ?: (new Database())->getConnection();
     }
 
 

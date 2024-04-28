@@ -24,26 +24,28 @@ class Controller
     /**
      * Get all data
      */
-    public function index()
+    public function index(): void
     {
         $data = $this->model->all();
+
         Response::json($data);
     }
 
     /**
      * Get data by id
-     * @param $id
+     * @param $id int
      */
-    public function show($id)
+    public function show(int $id): void
     {
         $data = $this->model->find($id);
+
         Response::json($data);
     }
 
     /**
      * Store data
      */
-    public function store()
+    public function store(): void
     {
         $data = Request::input();
 
@@ -55,15 +57,15 @@ class Controller
 
     /**
      * Update data by id
-     * @param $id
+     * @param $id int
      */
-    public function update($id)
+    public function update(int $id): void
     {
         $data = Request::input();
 
         $rules = $this->model->rules;
-        $rules['identification'] .= ',' . $id;
-        $rules['email'] .= ',' . $id;
+        $rules['email'] .= $id;
+        $rules['identification'] .= $id;
 
         $this->model->validate($data, false, true, $rules);
 
@@ -73,9 +75,9 @@ class Controller
 
     /**
      * Delete data by id
-     * @param $id
+     * @param $id int
      */
-    public function destroy($id)
+    public function destroy(int $id): void
     {
         $this->model->destroy($id);
         Response::json(['message' => 'Data has been deleted'], Response::STATUS_OK);

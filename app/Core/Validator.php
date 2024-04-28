@@ -38,7 +38,8 @@ class Validator
             'min_value' => [fn ($value, $min) => ($value >= $min), 'The :attribute field must be at least :min.'],
             'max_value' => [fn ($value, $max) => ($value <= $max), 'The :attribute field may not be greater than :max.'],
             'unique' => [fn ($value, $params) => $this->exists($value, $params), 'The :attribute field already exists.'],
-            'included' => [fn ($value, $params) => in_array($value, explode(',', $params)), 'The :attribute field must be included in :params.']
+            'exists' => [fn ($value, $params) => !$this->exists($value, $params), 'The :attribute does not exist in the database.'],
+            'included' => [fn ($value, $params) => in_array($value, explode(',', $params)), 'The :attribute field must be included in :params.'],
         ];
 
         $valid = true;

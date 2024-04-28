@@ -21,9 +21,9 @@ class User extends Model
      * @var array
      */
     public $rules = [
-        'identification' => 'required|numeric|unique:users,identification',
+        'identification' => 'required|numeric|unique:users,identification,',
         'full_name' => 'required',
-        'email' => 'required|email|unique:users,email',
+        'email' => 'required|email|unique:users,email,',
         'password' => 'required|min:6|max:20',
         'role' => 'included:merchant,user',
         'balance' => 'numeric'
