@@ -4,30 +4,54 @@ namespace App\Models;
 
 use PDO;
 use App\Core\Database;
+use App\Core\Validator;
 
 class Model
 {
     /**
      * Database connection
+     * @var PDO
      */
     private $pdo;
 
     /**
      * Table name
+     * @var string
      */
     protected $table = '';
 
     /**
      * Fillable columns
+     * @var array
      */
     protected $accessible = [];
 
     /**
+     * Validation rules
+     * @var array
+     */
+    public $rules = [];
+
+    /**
      * Constructor
+     * - Initialize the database connection
      */
     public function __construct()
     {
         $this->pdo = (new Database())->getConnection();
+    }
+
+    /**
+     * Validate the data
+     * @param array $data
+     * @param bool $die
+     * @return bool
+     */
+    public function validate(array $data, bool $die = true): bool
+    {
+        $validator = new Validator();
+
+        return $validator->validate($data, $this->table, $this->rules, $this->pdo, $die);
     }
 
     /**

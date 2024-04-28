@@ -45,6 +45,9 @@ class Controller
     public function store()
     {
         $data = Request::input();
+
+        $this->model->validate($data);
+
         $this->model->create($data);
         Response::json(['message' => 'Data has been created'], Response::HTTP_CREATED);
     }
@@ -56,6 +59,9 @@ class Controller
     public function update($id)
     {
         $data = Request::input();
+
+        $this->model->validate($data);
+
         $this->model->find($id)->update($data);
         Response::json(['message' => 'Data has been updated'], Response::HTTP_ACCEPTED);
     }
