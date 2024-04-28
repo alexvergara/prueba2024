@@ -2,6 +2,8 @@
 
 namespace App\Controllers\API\v1;
 
+use App\Core\Request;
+
 class Controller
 {
     /**
@@ -42,8 +44,8 @@ class Controller
      */
     public function store()
     {
-        $data = request()->all();
-        $model->create($data);
+        $data = Request::input();
+        $this->model->create($data);
         echo json_encode(['message' => 'Data has been created']);
     }
 
@@ -53,8 +55,8 @@ class Controller
      */
     public function update($id)
     {
-        $data = request()->all();
-        $model->find($id)->update($data);
+        $data = Request::input();
+        $this->model->find($id)->update($data);
         echo json_encode(['message' => 'Data has been updated']);
     }
 
@@ -64,7 +66,7 @@ class Controller
      */
     public function destroy($id)
     {
-        $model->destroy($id);
+        $this->model->destroy($id);
         echo json_encode(['message' => 'Data has been deleted']);
     }
 

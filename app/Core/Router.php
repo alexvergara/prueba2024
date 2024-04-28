@@ -12,8 +12,8 @@ class Router
         if ($path === '_404') self::abort();
 
         $path = explode('/', str_replace($prefix, '', $path));
-        $req_method = $_SERVER['REQUEST_METHOD'];
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $req_method = Request::method();
+        $uri = parse_url(Request::uri(), PHP_URL_PATH);
         $uri = explode('/', uri_path($uri, $prefix));
 
         if ($method === $req_method) {
