@@ -25,7 +25,7 @@ class Validator
      * @param bool $die
      * @return bool
      */
-    public function validate(array $data, $table = null, array $rules = [], PDO $pdo = null, bool $die = false): bool
+    public function validate(array $data, $strict = true, $table = null, array $rules = [], PDO $pdo = null, bool $die = false): bool
     {
         $this->pdo = $pdo;
 
@@ -37,7 +37,8 @@ class Validator
             'max' => [fn ($value, $max) => (strlen($value) <= $max), 'The :attribute field may not be greater than :max characters.'],
             'min_value' => [fn ($value, $min) => ($value >= $min), 'The :attribute field must be at least :min.'],
             'max_value' => [fn ($value, $max) => ($value <= $max), 'The :attribute field may not be greater than :max.'],
-            'unique' => [fn ($value, $params) => $this->exists($value, $params), 'The :attribute field already exists.']
+            'unique' => [fn ($value, $params) => $this->exists($value, $params), 'The :attribute field already exists.'],
+            'included' => [fn ($value, $params) => in_array($value, explode(',', $params)), 'The :attribute field must be included in :params.']
         ];
 
         $valid = true;
@@ -48,19 +49,21 @@ class Validator
                 $params = explode(':', $rule);
                 $rule = array_shift($params);
 
-                if (isset($data[$key]) && $rule !== 'required' && empty($data[$key])) continue;
+                if ($rule === 'required' && !$strict) continue; // Skip required rule if not strict
+                if (!isset($data[$key]) && $rule !== 'required' && empty($data[$key])) continue; // Skip if the field is empty and not required
 
                 $params = array_merge(isset($data[$key]) ? [$data[$key]] : [''], $params);
-                if (!call_user_func_array($_rules[$rule][0], $params)) {
-                    if (!isset($this->errors[$key])) {
-                        $this->errors[$key] = str_replace([':attribute', ':min', ':max'], [$key, isset($params[1]) ? $params[1] : '', isset($params[2]) ? $params[2] : ''], $_rules[$rule][1]);
+                if (!call_user_func_array($_rules[$rule][0], $params)) { // Call the validation rule
+                    if (!isset($this->errors[$key])) { // Set the error message
+                        $param = isset($params[1]) ? $params[1] : '';
+                        $this->errors[$key] = str_replace([':attribute', ':min', ':max', ':params'], [$key, $param, $param, $param], $_rules[$rule][1]);
                     }
                     $valid = false;
                 }
             }
         }
 
-        if ($die && !$valid) {
+        if ($die && !$valid) { // Die if the data is not valid
             Response::json(['errors' => $this->errors], Response::STATUS_UNPROCESSABLE_ENTITY);
             die();
         }
