@@ -12,12 +12,12 @@ Router::put('/users/{id}', 'UserController', 'update', $prefix);
 Router::delete('/users/{id}', 'UserController', 'destroy', $prefix);
 
 
-# Transaction Routes
-// Router::get('/transactions', 'TransactionController', 'index', $prefix);
-// Router::get('/transactions/{id}', 'TransactionController', 'show', $prefix);
-Router::post('/transactions', 'TransactionController', 'store', $prefix);
-// Router::put('/transactions/{id}', 'TransactionController', 'update', $prefix);
-// Router::delete('/transactions/{id}', 'TransactionController', 'destroy', $prefix);
+# Transfer Routes
+// Router::get('/transfers', 'TransferController', 'index', $prefix);
+// Router::get('/transfers/{id}', 'TransferController', 'show', $prefix);
+Router::post('/transfers', 'TransferController', 'store', $prefix);
+// Router::put('/transfers/{id}', 'TransferController', 'update', $prefix);
+// Router::delete('/transfers/{id}', 'TransferController', 'destroy', $prefix);
 
 
 # 404 Route fallback

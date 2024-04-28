@@ -14,5 +14,5 @@ class Notification extends Model
      * Fillable columns
      * @var array
      */
-    protected $accessible = ['transaction_id', 'type', 'status', 'body'];
+    protected $accessible = ['transfer_id', 'type', 'status', 'body'];
 }

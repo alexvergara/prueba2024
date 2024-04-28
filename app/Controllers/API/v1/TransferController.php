@@ -2,17 +2,17 @@
 
 namespace App\Controllers\API\v1;
 
-use App\Models\Transaction;
+use App\Models\Transfer;
 use App\Core\Request;
 use App\Core\Response;
 
-class TransactionController extends Controller
+class TransferController extends Controller
 {
     /**
      * The model class name
      * @var string
      */
-    protected $model = Transaction::class;
+    protected $model = Transfer::class;
 
 
     /**
@@ -24,7 +24,7 @@ class TransactionController extends Controller
 
         $this->model->validate($data);
 
-        $result = $this->model->transaction($data);
+        $result = $this->model->transfer($data);
 
         $result === true ? Response::json(['message' => 'Data has been created'], Response::STATUS_CREATED) : $result;
     }

@@ -6,13 +6,13 @@ use App\Core\Response;
 use App\Services\NotificationService;
 use App\Services\AuthorizationService;
 
-class Transaction extends Model
+class Transfer extends Model
 {
     /**
      * Table name
      * @var string
      */
-    protected $table = 'transactions';
+    protected $table = 'transfers';
 
     /**
      * Fillable columns
@@ -33,11 +33,11 @@ class Transaction extends Model
 
 
     /**
-     * Make a transaction
+     * Make a transfer
      * @param array $data
      * @return mixed
      */
-    public function transaction($data)
+    public function transfer($data)
     {
         $user = new User($this->pdo);
 
@@ -53,7 +53,7 @@ class Transaction extends Model
             return Response::json(['errors' => ['payer_id' => 'Payer and payee cannot be the same']], Response::STATUS_BAD_REQUEST);
         }
         if ($payer['role'] === 'merchant') {
-            return Response::json(['errors' => ['payer_id' => 'Merchant cannot make transactions']], Response::STATUS_BAD_REQUEST);
+            return Response::json(['errors' => ['payer_id' => 'Merchant cannot make transfers']], Response::STATUS_BAD_REQUEST);
         }
         if ($payer['balance'] < $data['amount']) {
             return Response::json(['errors' => ['payer_id' => 'Insufficient balance']], Response::STATUS_BAD_REQUEST);
@@ -67,15 +67,15 @@ class Transaction extends Model
 
         //-------------------/
 
-        // Transaction
-        $transaction = false;
-        $this->pdo->beginTransaction();
+        // Transfer
+        $transfer = false;
+        $this->pdo->beginTransfer();
         try {
-            $authorization = AuthorizationService::authorize(); // Authorize the transaction
+            $authorization = AuthorizationService::authorize(); // Authorize the transfer
 
             if (!$authorization || $authorization['message'] !== 'Autorizado') {
                 $this->pdo->rollBack();
-                return Response::json(['errors' => ['authorization' => 'Transaction not authorized']], Response::STATUS_FORBIDDEN);
+                return Response::json(['errors' => ['authorization' => 'Transfer not authorized']], Response::STATUS_FORBIDDEN);
             }
 
             $payer['balance'] -= $data['amount'];
@@ -84,7 +84,7 @@ class Transaction extends Model
             $user->update($payer['id'], ['balance' => $payer['balance']]); // Update the payer balance
             $user->update($payee['id'], ['balance' => $payee['balance']]); // Update the payee balance
 
-            $transaction = $this->create([
+            $transfer = $this->create([
                 'payer_id' => $payer['id'],
                 'payee_id' => $payee['id'],
                 'amount' => $data['amount']
@@ -96,7 +96,7 @@ class Transaction extends Model
             return Response::internalServerError($e->getMessage());
         }
 
-        if ($transaction) {
+        if ($transfer) {
             // Send notification
             $body = "Hi {$payee['full_name']}, you have received {$data['amount']} from {$payer['full_name']}";
 
@@ -105,12 +105,12 @@ class Transaction extends Model
             try {
                 $notification = new Notification($this->pdo);
                 $new_notification = $notification->create([
-                    'transaction_id' => $transaction['id'],
+                    'transfer_id' => $transfer['id'],
                     'type' => $type,
                     'body' => $body,
                 ]);
 
-                $notified = NotificationService::notify($type, $payee['email'], $body, 'Transaction Received');
+                $notified = NotificationService::notify($type, $payee['email'], $body, 'Transfer Received');
 
                 $status = ($notified && $notified['message']) ? 'completed' : 'failed';
                 $notification->save($new_notification['id'], ['status' => $status]);
