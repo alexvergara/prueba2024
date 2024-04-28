@@ -1,0 +1,38 @@
+src/
+├── Application/
+│   ├── Service/
+│   │   ├── UserService.php
+│   │   ├── TransferService.php
+│   │   └── NotificationService.php
+│   ├── DTO/
+│   │   ├── UserDTO.php
+│   │   └── TransferDTO.php
+│   └── ...
+├── Domain/
+│   ├── Model/
+│   │   ├── User.php
+│   │   └── Transfer.php
+│   ├── Repository/
+│   │   ├── UserRepositoryInterface.php
+│   │   └── TransferRepositoryInterface.php
+│   ├── Service/
+│   │   └── AuthorizationServiceInterface.php
+│   └── ...
+├── Infrastructure/
+│   ├── Persistence/
+│   │   ├── UserRepository.php
+│   │   └── TransferRepository.php
+│   ├── ExternalService/
+│   │   ├── AuthorizationService.php
+│   │   ├── NotificationService.php
+│   │   └── ThirdPartyServiceClient.php
+│   └── ...
+└── Presentation/
+    ├── Controller/
+    │   ├── UserController.php
+    │   └── TransferController.php
+    ├── Request/
+    │   └── TransferRequest.php
+    ├── Response/
+    │   └── ApiResponse.php
+    └── ...
