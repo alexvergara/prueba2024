@@ -32,7 +32,7 @@ This command will build and start the necessary Docker containers defined in the
 
 ## Accessing the Application
 
-Once the containers are up and running, you can access the application in your web browser at: https://localhost:8080
+Once the containers are up and running, you can access the application in your web browser at: http://localhost:8080
 
 ## Stopping the Application
 
