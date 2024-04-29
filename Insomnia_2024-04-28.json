@@ -1,0 +1,226 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2024-04-29T01:32:16.997Z",
+    "__export_source": "insomnia.desktop.app:v2022.4.2",
+    "resources": [
+        {
+            "_id": "req_5e68c2809acc4c958ba5926ab32838ee",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714316238968,
+            "created": 1714316177421,
+            "url": "{{ _.protocol }}://{{ _.host }}{{ _.port }}{{ _.prefix }}/users",
+            "name": "users",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [],
+            "authentication": {},
+            "metaSortKey": -1714316177421,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "wrk_da3b64259671488089eae4a2655dbd90",
+            "parentId": null,
+            "modified": 1714316082144,
+            "created": 1714316082144,
+            "name": "Prueba2024",
+            "description": "",
+            "scope": "collection",
+            "_type": "workspace"
+        },
+        {
+            "_id": "req_bb55f8091a5042cb85df047abc792a4c",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714335587468,
+            "created": 1714316267169,
+            "url": "{{ _.protocol }}://{{ _.host }}{{ _.port }}{{ _.prefix }}/users",
+            "name": "POST users",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"identification\": 55555555,\n\t\"full_name\": \"Test\",\n\t\"email\": \"test3@test.com\",\n\t\"password\": \"123456\",\n\t\"role\": \"merchant\"\n\t\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_dd23b825886e4dcda8a53378cc423ed2"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1711999320959,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_82e392ef66c24b8d98963d54c0fddfc6",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714330919401,
+            "created": 1714326460162,
+            "url": "{{ _.protocol }}://{{ _.host }}{{ _.port }}{{ _.prefix }}/users/2",
+            "name": "PUT users",
+            "description": "",
+            "method": "PUT",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"identification\": 22222222,\n\t\"full_name\": \"Merchant 2\"\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_dd23b825886e4dcda8a53378cc423ed2"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1711709713901.25,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_720d820949ae44548426cab23ee65b76",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714330921268,
+            "created": 1714329090728,
+            "url": "{{ _.protocol }}://{{ _.host }}{{ _.port }}{{ _.prefix }}/users/6",
+            "name": "Delete users",
+            "description": "",
+            "method": "DELETE",
+            "body": {
+                "mimeType": "application/json",
+                "text": ""
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_dd23b825886e4dcda8a53378cc423ed2"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1711564910372.375,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_9fd54128a4f44421baff7798f3fd2a6f",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714335595300,
+            "created": 1714330433462,
+            "url": "{{ _.protocol }}://{{ _.host }}{{ _.port }}{{ _.prefix }}/transactions",
+            "name": "POST transactions",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"payer_id\": 3,\n\t\"payee_id\": 1,\n\t\"amount\": 10\n}"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "id": "pair_dd23b825886e4dcda8a53378cc423ed2"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1711420106843.5,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "env_bd9bc02b7242e9477fb82bc49518c9b0a958c2d0",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714316193287,
+            "created": 1714316082147,
+            "name": "Base Environment",
+            "data": {},
+            "dataPropertyOrder": {},
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1714316082147,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_bd9bc02b7242e9477fb82bc49518c9b0a958c2d0",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714316082148,
+            "created": 1714316082148,
+            "name": "Default Jar",
+            "cookies": [],
+            "_type": "cookie_jar"
+        },
+        {
+            "_id": "spc_0322bed91c0b4bb6a0cbe102e5e0bc0b",
+            "parentId": "wrk_da3b64259671488089eae4a2655dbd90",
+            "modified": 1714316082145,
+            "created": 1714316082145,
+            "fileName": "Prueba2024",
+            "contents": "",
+            "contentType": "yaml",
+            "_type": "api_spec"
+        },
+        {
+            "_id": "env_f6cb7bc7a3cf48359c5d136b90e7572a",
+            "parentId": "env_bd9bc02b7242e9477fb82bc49518c9b0a958c2d0",
+            "modified": 1714316208490,
+            "created": 1714316147325,
+            "name": "local",
+            "data": {
+                "protocol": "http",
+                "host": "localhost",
+                "port": ":8080",
+                "prefix": "/api/v1"
+            },
+            "dataPropertyOrder": {
+                "&": [
+                    "protocol",
+                    "host",
+                    "port",
+                    "prefix"
+                ]
+            },
+            "color": "#7d69cb",
+            "isPrivate": false,
+            "metaSortKey": 1714316147325,
+            "_type": "environment"
+        }
+    ]
+}
