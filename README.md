@@ -5,8 +5,8 @@ This project is a simple system for managing user registrations and money transf
 
 ## Requirements
 
-- Docker
-- Docker Compose
+-   Docker
+-   Docker Compose
 
 ## Getting Started
 
@@ -34,3 +34,18 @@ This command will build and start the necessary Docker containers defined in the
 
 Once the containers are up and running, you can access the application in your web browser at: [](https://localhost:8080)
 
+## Stopping the Application
+
+To stop the application, run the following command:
+
+```bash
+docker-compose down
+```
+
+## Running Tests
+
+To run the tests, execute the following command:
+
+```bash
+docker-compose exec -it php_apache_container /bin/bash -ilc 'cd /var/www/html && vendor/bin/phpunit tests'
+```
