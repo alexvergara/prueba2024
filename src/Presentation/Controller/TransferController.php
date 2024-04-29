@@ -19,8 +19,8 @@ class TransferController
     {
         try {
             $this->transferService->transfer(
-                $request->getSenderId(),
-                $request->getRecipientId(),
+                $request->getPayerId(),
+                $request->getPayeeId(),
                 $request->getAmount()
             );
 

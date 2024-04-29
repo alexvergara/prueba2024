@@ -26,6 +26,10 @@ class TransferController extends Controller
 
         $result = $this->model->transfer($data);
 
-        $result === true ? Response::json(['message' => 'Data has been created'], Response::STATUS_CREATED) : $result;
+        if ($result === true) {
+            Response::json(['message' => 'Data has been created'], Response::STATUS_CREATED);
+        }
+
+        Response::json($result[0], $result[1]);
     }
 }

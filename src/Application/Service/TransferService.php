@@ -24,40 +24,40 @@ class TransferService
         $this->transferRepository = $transferRepository;
     }
 
-    public function transfer(string $senderId, string $recipientId, float $amount): void
+    public function transfer(string $payerId, string $payeeId, float $amount): void
     {
-        // Retrieve sender and recipient from repository
-        $sender = $this->userRepository->findById($senderId);
-        $recipient = $this->userRepository->findById($recipientId);
+        // Retrieve payer and payee from repository
+        $payer = $this->userRepository->findById($payerId);
+        $payee = $this->userRepository->findById($payeeId);
 
-        // Check if sender and recipient exist
-        if (!$sender || !$recipient) {
-            throw new \Exception('Sender or recipient not found.');
+        // Check if payer and payee exist
+        if (!$payer || !$payee) {
+            throw new \Exception('Payer or payee not found.');
         }
 
-        // Check if sender has sufficient balance
-        if ($sender->getBalance() < $amount) {
+        // Check if payer has sufficient balance
+        if ($payer->getBalance() < $amount) {
             throw new \Exception('Insufficient balance.');
         }
 
-        // Authorize the transaction
-        $isAuthorized = $this->authorizationService->authorize($amount, $senderId, $recipientId);
+        // Authorize the transfer
+        $isAuthorized = $this->authorizationService->authorize($amount, $payerId, $payeeId);
         if (!$isAuthorized) {
-            throw new \Exception('Transaction not authorized.');
+            throw new \Exception('Transfer not authorized.');
         }
 
         // Create transfer
-        $transfer = new Transfer($sender, $recipient, $amount);
+        $transfer = new Transfer($payer, $payee, $amount);
 
         // Save transfer to repository
         $this->transferRepository->create($transfer);
 
-        // Update sender's balance
-        $sender->decreaseBalance($amount);
-        $this->userRepository->save($sender);
+        // Update payer's balance
+        $payer->decreaseBalance($amount);
+        $this->userRepository->save($payer);
 
-        // Update recipient's balance
-        $recipient->increaseBalance($amount);
-        $this->userRepository->save($recipient);
+        // Update payee's balance
+        $payee->increaseBalance($amount);
+        $this->userRepository->save($payee);
     }
 }

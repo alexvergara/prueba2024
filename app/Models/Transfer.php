@@ -47,35 +47,35 @@ class Transfer extends Model
         $payer = $user->find($data['payer_id']);
 
         if (!$payer) {
-            return Response::json(['errors' => ['payer_id' => 'Payer not found']], Response::STATUS_NOT_FOUND);
+            return [['errors' => ['payer_id' => 'Payer not found']], Response::STATUS_NOT_FOUND];
         }
         if ($payer['id'] == $data['payee_id']) {
-            return Response::json(['errors' => ['payer_id' => 'Payer and payee cannot be the same']], Response::STATUS_BAD_REQUEST);
+            return [['errors' => ['payer_id' => 'Payer and payee cannot be the same']], Response::STATUS_BAD_REQUEST];
         }
         if ($payer['role'] === 'merchant') {
-            return Response::json(['errors' => ['payer_id' => 'Merchant cannot make transfers']], Response::STATUS_BAD_REQUEST);
+            return [['errors' => ['payer_id' => 'Merchant cannot make transfers']], Response::STATUS_BAD_REQUEST];
         }
         if ($payer['balance'] < $data['amount']) {
-            return Response::json(['errors' => ['payer_id' => 'Insufficient balance']], Response::STATUS_BAD_REQUEST);
+            return [['errors' => ['payer_id' => 'Insufficient balance']], Response::STATUS_BAD_REQUEST];
         }
 
         // Payee validations
         $payee = $user->find($data['payee_id']);
         if (!$payee) {
-            return Response::json(['payee_id' => ['payer_id' => 'Payee not found']], Response::STATUS_NOT_FOUND);
+            return [['errors' => ['payee_id' => 'Payee not found']], Response::STATUS_NOT_FOUND];
         }
 
         //-------------------/
 
         // Transfer
         $transfer = false;
-        $this->pdo->beginTransfer();
+        $this->pdo->beginTransaction();
         try {
             $authorization = AuthorizationService::authorize(); // Authorize the transfer
 
             if (!$authorization || $authorization['message'] !== 'Autorizado') {
                 $this->pdo->rollBack();
-                return Response::json(['errors' => ['authorization' => 'Transfer not authorized']], Response::STATUS_FORBIDDEN);
+                return [['errors' => ['authorization' => 'Transfer not authorized']], Response::STATUS_FORBIDDEN];
             }
 
             $payer['balance'] -= $data['amount'];
@@ -93,7 +93,7 @@ class Transfer extends Model
             $this->pdo->commit();
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            return Response::internalServerError($e->getMessage());
+            return [$e->getMessage(), Response::STATUS_INTERNAL_SERVER_ERROR];
         }
 
         if ($transfer) {

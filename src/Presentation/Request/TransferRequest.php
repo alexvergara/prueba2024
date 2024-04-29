@@ -4,25 +4,25 @@ namespace App\Presentation\Request;
 
 class TransferRequest
 {
-    private $senderId;
-    private $recipientId;
+    private $payerId;
+    private $payeeId;
     private $amount;
 
-    public function __construct(string $senderId, string $recipientId, float $amount)
+    public function __construct(string $payerId, string $payeeId, float $amount)
     {
-        $this->senderId = $senderId;
-        $this->recipientId = $recipientId;
+        $this->payerId = $payerId;
+        $this->payeeId = $payeeId;
         $this->amount = $amount;
     }
 
-    public function getSenderId(): string
+    public function getPayerId(): string
     {
-        return $this->senderId;
+        return $this->payerId;
     }
 
-    public function getRecipientId(): string
+    public function getPayeeId(): string
     {
-        return $this->recipientId;
+        return $this->payeeId;
     }
 
     public function getAmount(): float

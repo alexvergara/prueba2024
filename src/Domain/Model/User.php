@@ -91,10 +91,10 @@ class User
         $this->balance -= $amount;
     }
 
-    public function transfer(User $recipient, float $amount): void
+    public function transfer(User $payee, float $amount): void
     {
         $this->withdraw($amount);
-        $recipient->deposit($amount);
+        $payee->deposit($amount);
     }
 
     public function canTransfer(float $amount): bool
